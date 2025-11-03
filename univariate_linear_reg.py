@@ -27,7 +27,7 @@ class uniLinearRegression:
         self.m = len(self.x_train)
         self.w = 200
         self.b = 100
-        self.fx = lambda x: self.w * x + self.b
+        self.y_hat = lambda x: self.w * x + self.b
 
 
     def compute_model_output(self):
@@ -36,18 +36,11 @@ class uniLinearRegression:
             f_wb[i] = self.w * self.x_train[i] + self.b
         return f_wb
 
-    def compute_espec_price(self,price:float):
-        return self.w * price + self.b
-   
-
+    def compute_espec_size(self,size:float):
+        return self.w * size + self.b
    
     def compute_cost_function(self):
-        res = []
-        for i in range(self.m):
-            y_hat = self.fx(self.x_train[i])
-            y = self.y_train[i]
-            res.append((y_hat - y)**2)
-        return sum(res) / (2 * self.m)
+        return sum([(self.y_hat(x) - y)**2 for x,y in zip(self.x_train,self.y_train)]) / (2 * self.m)
 
     
 
@@ -68,4 +61,3 @@ class uniLinearRegression:
 ulr = uniLinearRegression()
 ulr.draw_graph()
 print(ulr.compute_cost_function())
-
