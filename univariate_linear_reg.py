@@ -14,7 +14,7 @@ b:parameter = bias
 
 f_wb = result of evaluation x(i) also known as "y hat" prediction
 
-
+f(x) = wx + b 
 
 """
 import numpy as np
@@ -27,6 +27,7 @@ class uniLinearRegression:
         self.m = len(self.x_train)
         self.w = 200
         self.b = 100
+        self.fx = lambda x: self.w * x + self.b
 
 
     def compute_model_output(self):
@@ -39,16 +40,16 @@ class uniLinearRegression:
         return self.w * price + self.b
    
 
-    def _compute_current_x_train(self,x_train_i):
-       return self.w * x_train_i + self.b
    
     def compute_cost_function(self):
         res = []
         for i in range(self.m):
-            y_hat = self._compute_current_x_train(self.x_train[i])
+            y_hat = self.fx(self.x_train[i])
             y = self.y_train[i]
             res.append((y_hat - y)**2)
         return sum(res) / (2 * self.m)
+
+    
 
     def draw_graph(self):
         tmp_f_wb  = self.compute_model_output()
