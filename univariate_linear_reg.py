@@ -37,7 +37,19 @@ class uniLinearRegression:
 
     def compute_espec_price(self,price:float):
         return self.w * price + self.b
-    
+   
+
+    def _compute_current_x_train(self,x_train_i):
+       return self.w * x_train_i + self.b
+   
+    def compute_cost_function(self):
+        res = []
+        for i in range(self.m):
+            y_hat = self._compute_current_x_train(self.x_train[i])
+            y = self.y_train[i]
+            res.append((y_hat - y)**2)
+        return sum(res) / (2 * self.m)
+
     def draw_graph(self):
         tmp_f_wb  = self.compute_model_output()
         
@@ -54,6 +66,5 @@ class uniLinearRegression:
 
 ulr = uniLinearRegression()
 ulr.draw_graph()
-
-print(ulr.compute_espec_price(1.2))
+print(ulr.compute_cost_function())
 
