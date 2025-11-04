@@ -25,12 +25,13 @@ class UniLinearRegression:
         self.x_train = np.array([1.0,2.0])
         self.y_train = np.array([300.0,500.0])
         self.m = len(self.x_train)
-        self.w = self.b = 0
+        self.w = 0
+        self.b = 0 
         self.y_hat = lambda x: self.w * x + self.b
         self.learning_rate = learning_rate
 
 
-    def compute_cost_function(self):return sum([(self.y_hat(x) - y)**2 for x,y in zip(self.x_train,self.y_train)]) / (2 * self.m)
+    def compute_cost_function(self):return sum([(self.y_hat(x) - y) **2 for x,y in zip(self.x_train,self.y_train)]) / (2 * self.m)
     def compute_w_derivative(self):return sum([(self.y_hat(x) - y) * x for x,y in zip (self.x_train,self.y_train)]) / self.m
     def compute_b_derivative(self):return sum([(self.y_hat(x) - y) for x,y in zip (self.x_train,self.y_train)]) / self.m
 
@@ -52,10 +53,11 @@ class UniLinearRegression:
     def compute_model_output(self):
         f_wb = np.zeros(self.m)
         for i in range(self.m):
-            f_wb[i] = self.w * self.x_train[i] + self.b
+            f_wb[i] = self.y_hat(self.x_train[i])
         return f_wb
 
     def compute_espec_size(self,size:float):
+        self.gradient_descent()
         return self.w * size + self.b
     
     def _draw_graph(self,tmp_f_wb):
@@ -71,9 +73,9 @@ class UniLinearRegression:
         self.gradient_descent()
         self._draw_graph(self.compute_model_output())
         
+    
         
+ulr = UniLinearRegression(0.05)
 
-     
 
 
-UniLinearRegression(0.05).main()
