@@ -51,7 +51,6 @@ class UniLinearRegression:
                 print(f"w and b converge on {i} iteration")
                 break
             prev_cost = current_cost
-     def com    
 
     def compute_model_output(self):
         f_wb = np.zeros(self.m)
