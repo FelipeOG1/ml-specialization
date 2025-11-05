@@ -1,6 +1,7 @@
 """
 Notation
 
+Uni means only one feature
 
 x_train = house size 
 y_train = house price
@@ -17,6 +18,7 @@ f_wb = result of evaluation x(i) also known as "y hat" prediction
 f(x) = wx + b 
 
 """
+from typing import dataclass_transform
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -28,7 +30,8 @@ class UniLinearRegression:
         self.w = 0
         self.b = 0 
         self.y_hat = lambda x: self.w * x + self.b
-        self.learning_rate = learning_rate
+        self.learning_rate = learning_rate 
+            
 
 
     def compute_cost_function(self):return sum([(self.y_hat(x) - y) **2 for x,y in zip(self.x_train,self.y_train)]) / (2 * self.m)
@@ -48,7 +51,7 @@ class UniLinearRegression:
                 print(f"w and b converge on {i} iteration")
                 break
             prev_cost = current_cost
-            
+     def com    
 
     def compute_model_output(self):
         f_wb = np.zeros(self.m)
@@ -72,10 +75,8 @@ class UniLinearRegression:
     def main(self):
         self.gradient_descent()
         self._draw_graph(self.compute_model_output())
-        
+           
     
         
 ulr = UniLinearRegression(0.05)
-
-
-
+ulr.main()
