@@ -27,7 +27,7 @@ J(w,b)
 import numpy as np
 class MultipleLinearRegression:
     def __init__(self):
-        self.x = np.array([
+        self.x_train = np.array([
             [10, 20, 30],   
             [5,  15, 25],               
             [2,  4,  6],   
@@ -35,22 +35,19 @@ class MultipleLinearRegression:
         ])
         self.w = np.array([1.0,2.5,-3.3])
         self.b = 4
-        self.m = self.x.shape[0]
-        self.y = np.array([460.0,232.0,315.0,178.0])
-    
+        self.m,self.n = self.x_train.shape[0],self.x_train.shape[1]
+        
+        self.y_train = np.array([460.0,232.0,315.0,178.0])
+        self.y_hat = np.dot(self.x_train,self.w) + self.b 
+        self.learning_rate = 0.03
         
 
-    def gradient_descent(self):
-        #TODO COMPUTE DERIVATIE GOING FROM self.x.T[0] ... self.m
-        pass
+    def compute_w_derivate(self,index):return ((self.y_hat - self.y_train) * self.x_train[:,index]).sum() / self.m
+    def compute_b_derivate(self):return ((self.y_hat - self.y_train)).sum() / self.m
+    def graient_descent(self):
+        for i in range(self.n):
+            self.w[i] = self.w[i] - self.learning_rate * self.compute_w_derivate(i)
+        
+        self.b = self.compute_b_derivate()
 
-    def sum_vectorization(self):return np.dot(self.x,self.w) + self.b
-    
-           
-
-
-
-ml = MultipleLinearRegression()
-
-ml.sum_vectorization()
-ml.gradient_descent()
+   
