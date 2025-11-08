@@ -35,7 +35,7 @@ class MultipleLinearRegression:
         self.y_std = np.std(self.y_train)
         self.y_train = (self.y_train - self.y_mean) / self.y_std
 
-        self.m,self.n = self.x_train.shape[0],self.x_train.shape[1]
+        self.m,self.n = self.x_train.shape
         self.b = 0
         self.w = np.zeros(self.n)
         self.y_hat = lambda x_train:np.dot(x_train,self.w) + self.b 
