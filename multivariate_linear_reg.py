@@ -26,26 +26,29 @@ J(w,b)
 
 import numpy as np
 import matplotlib.pyplot as plt
-
+np.set_printoptions(precision = 2,suppress = True)
 class MultipleLinearRegression:
     def __init__(self):
-        self.x_train = np.array([[2104, 5, 1, 45], [1416, 3, 2, 40], [852, 2, 1, 35]],dtype = float)
+        self.X = np.array([[2104, 5, 1, 45], 
+                                 [1416, 3, 2, 40], 
+                                 [852, 2, 1, 35]],dtype = float)
+
         self.y_train = np.array([460, 232, 178],dtype = float)
-        self.y_mean = np.mean(self.y_train)
-        self.y_std = np.std(self.y_train)
-        self.y_train = (self.y_train - self.y_mean) / self.y_std
-        self.m,self.n = self.x_train.shape
+        self.m,self.n = self.X.shape#shape:(rows,cols)
         self.b = 0
         self.w = np.zeros(self.n)
         self.y_hat = lambda x_train:np.dot(x_train,self.w) + self.b 
-        self.learning_rate = 5.0e-7
+        self.mean_normalization = lambda train:(train - np.mean(train,axis = 0)) / (np.max(train,axis = 0) - np.min(train,axis = 0))
+        self.z_score_normalization = lambda train: (train - np.mean(train,axis = 0)) / (np.std(train,axis = 0))
+        self.learning_rate = 0.001
+        self.X,self.y_train = self.z_score_normalization(self.X),self.z_score_normalization(self.y_train)
         
 
     def compute_w_derivate(self):
-        hat_minus_train = self.y_hat(self.x_train) - self.y_train
-        return (1 / self.m) * np.dot(self.x_train.T , (hat_minus_train)) , hat_minus_train #avoid computing y_hat - y_train twice
-    def compute_b_derivate(self):return ((self.y_hat(self.x_train) - self.y_train)).sum() / self.m #this is equivalent to doing np.mean(self.y_hat - self.y_train)
-    def compute_cost_function(self):return (1 / (2 * self.m)) * np.sum((self.y_hat(self.x_train) - self.y_train) ** 2)
+        hat_minus_train = self.y_hat(self.X) - self.y_train
+        return (1 / self.m) * np.dot(self.X.T , (hat_minus_train)) , hat_minus_train #avoid computing y_hat - y_train twice
+    def compute_b_derivate(self):return ((self.y_hat(self.X) - self.y_train)).sum() / self.m #this is equivalent to doing np.mean(self.y_hat - self.y_train)
+    def compute_cost_function(self):return (1 / (2 * self.m)) * np.sum((self.y_hat(self.X) - self.y_train) ** 2)
 
     def gradient_descent(self,epsilon = 0.000001,max_iterations = 1000000):
         prev_cost = self.compute_cost_function()
@@ -60,7 +63,12 @@ class MultipleLinearRegression:
                 print(f"convergence on {i}th iteration")
                 break    
             prev_cost = current_cost
-            
-          
-        print(self.compute_cost_function())
-MultipleLinearRegression().gradient_descent()
+ml = MultipleLinearRegression()
+
+ml.gradient_descent()
+
+
+
+
+
+
