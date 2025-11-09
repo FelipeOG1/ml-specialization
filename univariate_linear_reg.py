@@ -27,7 +27,7 @@ class UniLinearRegression:
         np.random.seed(0)
         self.m = 50
         self.x_train = np.linspace(0, 10, self.m)                  
-        self.y_train = 3 * self.x_train + 4 + np.random.randn(self.m) * 2
+        self.y_train = 3 * self.x_train + 4 + np.random.randn(self.m) * 2 
         self.w = 0
         self.b = 0 
         self.y_hat = lambda x_train: self.w * x_train + self.b
@@ -73,5 +73,5 @@ class UniLinearRegression:
         self._draw_graph(self.compute_model_output())
     
         
-ulr = UniLinearRegression(0.0001)
+ulr = UniLinearRegression(0.02)
 ulr.main()
