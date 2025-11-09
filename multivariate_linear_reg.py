@@ -42,7 +42,7 @@ class MultipleLinearRegression:
         self.z_score_normalization = lambda train: (train - np.mean(train,axis = 0)) / (np.std(train,axis = 0))
         self.learning_rate = 0.001
         self.X,self.y_train = self.z_score_normalization(self.X),self.z_score_normalization(self.y_train)
-        
+        self.cost_history = []      
 
     def compute_w_derivate(self):
         hat_minus_train = self.y_hat(self.X) - self.y_train
@@ -58,15 +58,29 @@ class MultipleLinearRegression:
             self.b = self.b - self.learning_rate * np.mean(hat_minus_train)
 
             current_cost = self.compute_cost_function()
+            self.cost_history.append(current_cost)
             print(current_cost,prev_cost)
             if abs(current_cost - prev_cost) < epsilon:
                 print(f"convergence on {i}th iteration")
                 break    
             prev_cost = current_cost
-ml = MultipleLinearRegression()
 
-ml.gradient_descent()
+    def plot_cost_history(self):
+        plt.plot(range(len(self.cost_history)),self.cost_history,color = 'blue')
+        plt.title("Cost Function vs Iterations")
+        plt.xlabel("Iteration")
+        plt.ylabel("Cost (J)")
+        plt.grid(True)
+        plt.savefig("cost_function.png", dpi=300, bbox_inches='tight')
 
+    def __call__(self):
+        self.gradient_descent()
+        self.plot_cost_history()
+
+
+
+
+MultipleLinearRegression()()
 
 
 
