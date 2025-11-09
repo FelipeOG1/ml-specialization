@@ -29,11 +29,11 @@ class UniLinearRegression:
         self.m = len(self.x_train)
         self.w = 0
         self.b = 0 
-        self.y_hat = lambda x: self.w * x + self.b
+        self.y_hat = lambda x_train: self.w * x_train + self.b
         self.learning_rate = learning_rate 
-            
-
-
+        self.mean_normalization = lambda train: (train - np.mean(train)) / (np.max(train) - np.min(train))
+        self.y_train = self.mean_normalization(self.y_train)
+    def compute_vectorized_cost_function(self):return ((self.y_hat(self.x_train) - self.y_train) **2).sum() / (2 * self.m)
     def compute_cost_function(self):return sum([(self.y_hat(x) - y) **2 for x,y in zip(self.x_train,self.y_train)]) / (2 * self.m)
     def compute_w_derivative(self):return sum([(self.y_hat(x) - y) * x for x,y in zip (self.x_train,self.y_train)]) / self.m
     def compute_b_derivative(self):return sum([(self.y_hat(x) - y) for x,y in zip (self.x_train,self.y_train)]) / self.m
@@ -44,9 +44,8 @@ class UniLinearRegression:
             temp_w = self.w - self.learning_rate * self.compute_w_derivative()
             temp_b = self.b - self.learning_rate * self.compute_b_derivative()
             self.w,self.b = temp_w,temp_b
-            
-            current_cost = self.compute_cost_function()
-            
+            current_cost = self.compute_vectorized_cost_function()
+            print(f"prev_cost:{prev_cost},current_cost:{current_cost}")          
             if abs(current_cost - prev_cost) < epsilon:
                 print(f"w and b converge on {i} iteration")
                 break
@@ -77,5 +76,5 @@ class UniLinearRegression:
            
     
         
-ulr = UniLinearRegression(0.05)
+ulr = UniLinearRegression(0.0001)
 ulr.main()

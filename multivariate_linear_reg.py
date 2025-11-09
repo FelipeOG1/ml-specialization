@@ -30,8 +30,8 @@ np.set_printoptions(precision = 2,suppress = True)
 class MultipleLinearRegression:
     def __init__(self):
         self.X = np.array([[2104, 5, 1, 45], 
-                                 [1416, 3, 2, 40], 
-                                 [852, 2, 1, 35]],dtype = float)
+                           [1416, 3, 2, 40], 
+                           [852, 2, 1, 35]],dtype = float)
 
         self.y_train = np.array([460, 232, 178],dtype = float)
         self.m,self.n = self.X.shape#shape:(rows,cols)
@@ -40,7 +40,7 @@ class MultipleLinearRegression:
         self.y_hat = lambda x_train:np.dot(x_train,self.w) + self.b 
         self.mean_normalization = lambda train:(train - np.mean(train,axis = 0)) / (np.max(train,axis = 0) - np.min(train,axis = 0))
         self.z_score_normalization = lambda train: (train - np.mean(train,axis = 0)) / (np.std(train,axis = 0))
-        self.learning_rate = 0.001
+        self.learning_rate = 0.004
         self.X,self.y_train = self.z_score_normalization(self.X),self.z_score_normalization(self.y_train)
         self.cost_history = []      
 
@@ -56,7 +56,6 @@ class MultipleLinearRegression:
             w_derivative,hat_minus_train = self.compute_w_derivate()
             self.w = self.w - self.learning_rate * w_derivative
             self.b = self.b - self.learning_rate * np.mean(hat_minus_train)
-
             current_cost = self.compute_cost_function()
             self.cost_history.append(current_cost)
             print(current_cost,prev_cost)
