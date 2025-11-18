@@ -18,7 +18,7 @@ class BinaryClasification:
         self.w = np.zeros(self.m)
         self.b = 0
         
-    def compute_logistic_func(self):return self.X * self.w + self.b
+    def compute_logistic_func(self):return np.dot(self.X , self.w) + self.b
         
     def compute_sigmoid(self,z):return 1/(1 + np.exp(-z))#np.exp elevate euler to each element of entry z
     
