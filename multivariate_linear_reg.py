@@ -76,10 +76,12 @@ class MultipleLinearRegression:
         self.gradient_descent()
         self.plot_cost_history()
 
+    def __str__(self):
+        rows,cols = self.X.shape
+        return f"rows:{rows} ->cols {cols}"
 
 
-
-MultipleLinearRegression()()
+print(MultipleLinearRegression())
 
 
 

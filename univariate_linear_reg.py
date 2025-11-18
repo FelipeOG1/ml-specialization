@@ -71,7 +71,10 @@ class UniLinearRegression:
     def main(self):
         self.gradient_descent()
         self._draw_graph(self.compute_model_output())
-    
         
-ulr = UniLinearRegression(0.02)
+    def __call___(self):
+        self.gradient_descent()
+        self._draw_graph(self.compute_model_output())  
+        
+ulr = UniLinearRegression(0.0001)
 ulr.main()
