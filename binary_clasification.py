@@ -25,7 +25,7 @@ class BinaryClasification:
     
     def compute_cost_function(self,predictions):
         losses = -self.y*np.log(predictions) - (1-self.y)*np.log(1 - predictions)
-        return 1/self.m * losses.sum()
+        return np.mean(losses.sum())#same as 1/self.m
         
         
     def __call__(self):
