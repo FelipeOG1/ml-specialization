@@ -17,13 +17,10 @@ class BinaryClasification:
     def __init__(self):
         self.X = np.array([[0.5, 1.5], [1,1], [1.5, 0.5], [3, 0.5], [2, 2], [1, 2.5]])
         self.y = np.array([0,0,0,1,1,1]).reshape(-1,1)#reshape asserts 2 dimension array for predictions
-        self.n,self.m = self.X.shape
-        self.b = -3
-        self.w = np.zeros(self.m)#zeros with len features
+        self.n,self.m = self.X
     def compute_sigmoid(self):
-       pass
+       pass 
     def __call__(self):
-        return self.n
 bn = BinaryClasification()
 
 
