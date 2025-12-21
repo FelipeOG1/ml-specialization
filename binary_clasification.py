@@ -12,7 +12,7 @@ w and x being vectors
 
 import numpy as np
 import matplotlib.pyplot as plt
-
+from numpy.typing import NDArray
 class BinaryClasification:
     def __init__(self):
         self.X = np.array([[0.5, 1.5], [1,1], [1.5, 0.5], [3, 0.5], [2, 2], [1, 2.5]])
@@ -20,10 +20,14 @@ class BinaryClasification:
         self.n,self.m = self.X.shape
         self.b = -3
         self.w = np.zeros(self.m)#zeros with len features
-    def compute_sigmoid(self):
-       pass
+    def compute_z(self)->NDArray:return np.dot(self.X,self.w) + self.b
+    def compute_sigmoid(self,z:NDArray)->NDArray:return 1/(1+np.exp(-z))
+        
+       
     def __call__(self):
-        return self.n
+       self.w = np.array([1,1]) 
+       z = self.compute_z()
+       return self.compute_sigmoid(z)
 bn = BinaryClasification()
 
 
