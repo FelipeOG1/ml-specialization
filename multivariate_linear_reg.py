@@ -48,6 +48,7 @@ class MultipleLinearRegression:
         hat_minus_train = self.y_hat(self.X) - self.y_train
         return (1 / self.m) * np.dot(self.X.T , (hat_minus_train)) , hat_minus_train #avoid computing y_hat - y_train twice
     def compute_b_derivate(self):return ((self.y_hat(self.X) - self.y_train)).sum() / self.m #this is equivalent to doing np.mean(self.y_hat - self.y_train)
+    
     def compute_cost_function(self):return (1 / (2 * self.m)) * np.sum((self.y_hat(self.X) - self.y_train) ** 2)
 
     def gradient_descent(self,epsilon = 0.000001,max_iterations = 1000000):

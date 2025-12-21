@@ -13,24 +13,21 @@ w and x being vectors
 import numpy as np
 class BinaryClasification:
     def __init__(self):
-        self.X = np.array([1,2,3])
-        self.m = len(self.X)
-        self.w = np.zeros(self.m)
+        self.X = np.array([0,0,0,1,1,1,1])
+        self.w = np.zeros(self.X.shape[0])
         self.b = 0
-        
-    def compute_logistic_func(self):return np.dot(self.X , self.w) + self.b
-        
-    def compute_sigmoid(self,z):return 1/(1 + np.exp(-z))#np.exp elevate euler to each element of entry z
+        self.threesold = 0.5
+
+    def compute_z(self):return np.dot(self.X,self.w) + self.b
     
-    def __call__(self):
-        z = self.compute_logistic_func()
-        return self.compute_sigmoid(z)
-        
+    def compute_sigmoid(self):
+        ans =  1/(1 + np.exp(-self.compute_z()))      
+        return 0 if ans<=self.threesold else 1
+       
 
 
-     
 
-bc = BinaryClasification()
-        
-print(bc())
-        
+bn = BinaryClasification()
+
+
+print(bn.compute_sigmoid())

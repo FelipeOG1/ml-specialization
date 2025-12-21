@@ -33,6 +33,8 @@ class UniLinearRegression:
         self.y_hat = lambda x_train: self.w * x_train + self.b
         self.learning_rate = learning_rate 
         self.mean_normalization = lambda train: (train - np.mean(train)) / (np.max(train) - np.min(train))
+
+        
     def compute_cost_function(self):return ((self.y_hat(self.x_train) - self.y_train) ** 2).sum() / (2 * self.m)
     def compute_w_derivative(self):return ((self.y_hat(self.x_train) - self.y_train) * self.x_train).sum() / self.m
     def compute_b_derivative(self):return (self.y_hat(self.x_train) - self.y_train).sum() / self.m
