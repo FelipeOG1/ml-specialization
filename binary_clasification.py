@@ -22,12 +22,15 @@ class BinaryClasification:
         self.w = np.zeros(self.m)#zeros with len features
     def compute_z(self)->NDArray:return np.dot(self.X,self.w) + self.b
     def compute_sigmoid(self,z:NDArray)->NDArray:return 1/(1+np.exp(-z))
-        
-       
+    def compute_logistic_loss(self,predictions):return -self.y*np.log(predictions) - (1-self.y)*np.log(1-predictions)
+    
     def __call__(self):
        self.w = np.array([1,1]) 
        z = self.compute_z()
-       return self.compute_sigmoid(z)
+       y = self.y.reshape(-1, 1)
+
+       predictions = self.compute_sigmoid(z)
+       return self.compute_logistic_loss(predictions)
 bn = BinaryClasification()
 
 
