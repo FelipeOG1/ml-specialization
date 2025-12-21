@@ -20,13 +20,21 @@ class BinaryClasification:
         self.n,self.m = self.X.shape
         self.b = -3
         self.w = np.zeros(self.m)#zeros with len features
+        
     def compute_z(self)->NDArray:return np.dot(self.X,self.w) + self.b
-    def compute_sigmoid(self,z:NDArray)->NDArray:return 1/(1+np.exp(-z))
-    
+    def compute_logistic_function(self,z:NDArray)->NDArray:return 1/(1+np.exp(-z))
+    def compute_w_derivative(self,predictions):return np.mean(np.sum(predictions - self.y))*self.X.T
+    def compute_b_derivatie(self,predictions):return np.mean(np.sum(predictions - self.y))
     def compute_cost_function(self,predictions):
         losses = -self.y*np.log(predictions) - (1-self.y)*np.log(1 - predictions)
         return np.mean(losses.sum())#same as 1/self.m
-        
+    
+
+    def gradient_descent(self,epsilon = 1e-6,max_iterations = 10000):
+        pass
+    @property
+    def features(self):
+        return self.X.T.shape
         
     def __call__(self):
        self.w = np.array([1,1]) 
@@ -38,4 +46,4 @@ class BinaryClasification:
 bn = BinaryClasification()
 
 
-print(bn())
+print(bn.features)
