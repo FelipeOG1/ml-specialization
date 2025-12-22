@@ -20,30 +20,38 @@ class BinaryClasification:
         self.n,self.m = self.X.shape
         self.b = -3
         self.w = np.zeros(self.m)#zeros with len features
+        self.alpha = 0.0001
         
     def compute_z(self)->NDArray:return np.dot(self.X,self.w) + self.b
     def compute_logistic_function(self,z:NDArray)->NDArray:return 1/(1+np.exp(-z))
-    def compute_w_derivative(self,predictions):return np.mean(np.sum(predictions - self.y))*self.X.T
-    def compute_b_derivatie(self,predictions):return np.mean(np.sum(predictions - self.y))
-    def compute_cost_function(self,predictions):
-        losses = -self.y*np.log(predictions) - (1-self.y)*np.log(1 - predictions)
-        return np.mean(losses.sum())#same as 1/self.m
-    
+    def compute_w_derivative(self,predictions):return np.mean(np.dot(self.X.T,(predictions - self.y)))
+    def compute_b_derivative(self,predictions):return np.mean(predictions - self.y) 
+    def compute_losses(self,predictions): return -self.y*np.log(predictions) - (1-self.y)*np.log(1 - predictions)
+    def compute_cost_function(self,predictions):return np.mean(self.compute_losses(predictions))
+        
 
     def gradient_descent(self,epsilon = 1e-6,max_iterations = 10000):
-        pass
+        predictions = self.compute_logistic_function(self.compute_z())
+        prev_cost = self.compute_cost_function(predictions)
+        new_cost = 0
+        for _ in range(max_iterations):
+            
+            self.w = self.alpha - self.compute_w_derivative(predictions)
+            self.b = self.alpha - self.compute_b_derivative(predictions)
+            new_cost = self.compute_cost_function(self.compute_logistic_function(self.compute_z()))
+            if abs(new_cost - prev_cost)<=epsilon:
+                prev_cost = new_cost
+                break
+            
+            
+            
     @property
     def features(self):
-        return self.X.T.shape
+       pass
         
     def __call__(self):
-       self.w = np.array([1,1]) 
-       z = self.compute_z()
-       y = self.y.reshape(-1, 1)
-
-       predictions = self.compute_sigmoid(z)
-       return self.compute_cost_function(predictions)
+        predictions = self.compute_logistic_function(self.compute_z())
+        assert(predictions.shape[0]  == self.X.shape[0])
+        return self.compute_w_derivative(predictions)
 bn = BinaryClasification()
-
-
-print(bn.features)
+print(bn())
