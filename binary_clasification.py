@@ -30,28 +30,22 @@ class BinaryClasification:
     def compute_cost_function(self,predictions):return np.mean(self.compute_losses(predictions))
         
 
-    def gradient_descent(self,epsilon = 1e-6,max_iterations = 10000):
-        predictions = self.compute_logistic_function(self.compute_z())
-        prev_cost = self.compute_cost_function(predictions)
-        new_cost = 0
-        for _ in range(max_iterations):
-            
-            self.w = self.alpha - self.compute_w_derivative(predictions)
-            self.b = self.alpha - self.compute_b_derivative(predictions)
-            new_cost = self.compute_cost_function(self.compute_logistic_function(self.compute_z()))
-            if abs(new_cost - prev_cost)<=epsilon:
-                prev_cost = new_cost
+    def gradient_descent(self,epsilon = 1e-6,max_iterations = 20000):
+        prev_cost = float('inf')
+        cost = 0
+        for i in range(max_iterations):
+            predictions = self.compute_logistic_function(self.compute_z())
+            dw = self.compute_w_derivative(predictions)  # Shape: (n_features,)
+            db = self.compute_b_derivative(predictions)  # Shape: scalar
+            self.w -= self.alpha *dw
+            self.b -=self.alpha * db
+            cost = self.compute_cost_function(predictions)
+            if abs(prev_cost - cost) < epsilon:
+                
                 break
-            
-            
-            
-    @property
-    def features(self):
-       pass
-        
+            prev_cost = cost
+        return cost
     def __call__(self):
-        predictions = self.compute_logistic_function(self.compute_z())
-        assert(predictions.shape[0]  == self.X.shape[0])
-        return self.compute_w_derivative(predictions)
+        return self.gradient_descent()
 bn = BinaryClasification()
 print(bn())
