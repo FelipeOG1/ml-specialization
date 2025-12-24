@@ -21,15 +21,18 @@ class BinaryClasification:
         self.b = -3
         self.w = np.zeros(self.m)#zeros with len features
         self.alpha = 0.0001
-        self.lam = 200000
+        self.lam = 200000#lambda value for regularization
     def compute_z(self)->NDArray:return np.dot(self.X,self.w) + self.b
     def compute_logistic_function(self,z:NDArray)->NDArray:return 1/(1+np.exp(-z))
     def compute_w_derivative(self,predictions):return np.mean(np.dot(self.X.T,(predictions - self.y)))
     def compute_b_derivative(self,predictions):return np.mean(predictions - self.y) 
     def compute_losses(self,predictions): return -self.y*np.log(predictions) - (1-self.y)*np.log(1 - predictions)
     def compute_cost_function(self,predictions):return np.mean(self.compute_losses(predictions))
-    def compute_regularization(self):return self.lam/(2*self.m)
+    def compute_regularize_function(self):return self.lam/(2*self.m) * np.sum(np.square(self.w))
 
+    def regularize_cost_function(self,predictions):return self.compute_cost_function(predictions) + self.lam/(2*self.m) * np.sum(np.square(self.w))
+
+        
     def gradient_descent(self,epsilon = 1e-6,max_iterations = 20000):
         prev_cost = float('inf')
         cost = 0
