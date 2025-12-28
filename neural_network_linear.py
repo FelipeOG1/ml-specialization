@@ -23,8 +23,9 @@ class NeuralNetwork:
     def setup_custom_weights(self,w:float,b:float)->None:
         set_w = np.array([[w]],dtype = np.float32)
         set_b = np.array([b],dtype = np.float32)
+        self.layer.set_weights([set_w,set_b])
+        assert(self.layer.get_weights() == [[set_w],[set_b]])
         
-    
 
 
 x =  np.array([[1.0], [2.0]], dtype=np.float32)#a0
@@ -33,3 +34,4 @@ nn = NeuralNetwork(x,y)
 
 w,b = 200.0,100.0
 nn.setup_custom_weights(w,b)
+print(nn.weights)
