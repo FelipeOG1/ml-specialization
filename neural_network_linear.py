@@ -15,7 +15,7 @@ class NeuralNetwork:
         self.X = X
         self.y_train = y_train
         self.layer = tf.keras.layers.Dense(units = 1,activation = 'linear')
-        self.a1 = self.layer(self.X[0].reshape(1,1))
+        self.layer.build(input_shape = (None,1))#need this for custom weights
         
     @property
     def weights(self):return self.layer.get_weights()
@@ -27,7 +27,8 @@ class NeuralNetwork:
         assert(self.layer.get_weights() == [[set_w],[set_b]])
         
 
-
+    def test_foo(self):
+        w,b = self.layer.get_weights()
 x =  np.array([[1.0], [2.0]], dtype=np.float32)#a0
 y = np.array([[300.0], [500.0]], dtype=np.float32)
 nn = NeuralNetwork(x,y)
