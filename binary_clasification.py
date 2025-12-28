@@ -13,6 +13,7 @@ w and x being vectors
 import numpy as np
 import matplotlib.pyplot as plt
 from numpy.typing import NDArray
+
 class BinaryClasification:
     def __init__(self):
         self.X = np.array([[0.5, 1.5], [1,1], [1.5, 0.5], [3, 0.5], [2, 2], [1, 2.5]])
