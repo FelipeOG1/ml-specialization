@@ -26,13 +26,16 @@ class NeuralNetwork:
         self.layer.set_weights([set_w,set_b])
         assert(self.layer.get_weights() == [[set_w],[set_b]])
         
-
-    def test_foo(self):
+    def test_linear_regression(self):
         w,b = self.layer.get_weights()
+        a1 = self.layer(self.X[0].reshape(1,1))
+        manual_a1 = np.dot(self.X[0].reshape(1,1),w) + b
+        assert(a1 == manual_a1)
+        
 x =  np.array([[1.0], [2.0]], dtype=np.float32)#a0
 y = np.array([[300.0], [500.0]], dtype=np.float32)
 nn = NeuralNetwork(x,y)
 
 w,b = 200.0,100.0
 nn.setup_custom_weights(w,b)
-print(nn.weights)
+print(nn.test_linear_regression())
