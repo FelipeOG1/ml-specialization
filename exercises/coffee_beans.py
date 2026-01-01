@@ -8,8 +8,6 @@ class BinaryPredictor:
             tf.keras.layers.Dense(units = 3,activation = 'sigmoid'),
             tf.keras.layers.Dense(units = 1 ,activation = 'sigmoid')])
             
-
-        
     def get_predictions(self,x_new):
         """
         self.model.compile()
