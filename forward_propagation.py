@@ -1,44 +1,52 @@
 import numpy as np
-import tensorflow as tf
 
 
 class Neuron:
     def compute_scalar(self,x,w,b):
         sigmoid = lambda z:1/(1+np.exp(-z))
-        return sigmoid(-(np.dot(x,w)) + b)
-    
+        return sigmoid(-(np.dot(x,w)) + b)    
+
 class Layer:
-    def __init__(self,units):
+    def __init__(self,units:int):
+        self._core = [Neuron() for _ in range(units)]
         self.units = units
-        self.core = [Neuron() for _ in range(self.units)]
         self.a_out = np.zeros(units)
-        self.w =  np.array([[1,-3,5],[2,4,-6]],dtype = np.float32)#fix w example
-        self.b = np.array([-1,1,2],dtype = np.float32)
-        
-    def __call__(self,x):
-        predictions = np.array([
-            self.core[i].compute_scalar(self.w[:,i],self.b[i],x) for i in range(len(self.core))])
-        self.a_out = predictions
-        return self.a_out
-        
-    def set_weights(self,w,b):self.w,self.b = w,b
-            
 
-class Sequential:
-    def __init__(self,layers:list[Layer]):
-        self.layers = layers
-        
-    def predict(self,x):
-       prev_a = x
-       for layer in self.layers:
-           a = layer(prev_a)
-           prev_a = a
+    def __call__(self,a_in,w,b):#returns a_out
+        for index,neuron in enumerate(self._core):
+            curr_w = w[:,index]
+            curr_b = b[index]
+            res = neuron()
 
-        return layer[-1].a_out
-           
+
+    def __len__(self):
+        return len(self._core)
     
-if __name__ == "__main__":
-    l1 = Layer(units = 3)
-    x_train = np.array([1.0,3.0])
-    prediction = l1(x_train)
-    print(prediction)
+    def __getitem__(self,position:int):
+        if position>=len(self._core):raise ValueError(f"Out of bounce,this layer only have {self.units}units")
+        return self._core[position]
+
+    
+
+
+
+
+
+in_layer = np.array([-2,4])
+
+w = np.array([[1,-3,5],
+              [2,4,6]])
+
+b = np.array([-1,1,2])
+
+l1 = Layer(units=3)
+l2 = Layer(units=1)
+
+
+a1_out = l1(a_in=in_layer,
+            w=w,
+            b=b
+            )
+
+
+print(a1_out)   
