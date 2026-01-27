@@ -39,9 +39,18 @@ class Sequential:
         self._weights = None
     def predict(self,x_train:np.ndarray):
         if not self._weights:raise ValueError("Add weithgs by set_weights")
-        for index,layer in enumerate(self.layers):
-            a_in = x_train
-            weights = self._weights[:index + 2]
+            
+        weight_index = 0
+        current_input = x_train
+        
+        for layer in self.layers:
+            w = self._weights[weight_index]
+            b = self._weights[weight_index + 1]
+            current_input = layer(current_input,w,b)
+        
+            weight_index+=2
+
+        return current_input
             
         
     def set_weights(self,weights:list[np.ndarray]):
@@ -50,31 +59,24 @@ class Sequential:
         
     
     
+in_layer = np.array([-2, 4]) 
 
-in_layer = np.array([-2,4])
+w1 = np.array([[1, -3, 5],
+               [2,  4, 6]])
+b1 = np.array([-1, 1, 2])
 
-w = np.array([[1,-3,5],
-              [2,4,6]])
+w2 = np.array([[5], 
+               [1], 
+               [3]]) 
+b2 = np.array([-3])
 
-b = np.array([-1,1,2])
-
-w2 = np.array([[5,-1,2],
-              [1,3,10]])
-
-
-b2 = np.array([-3,5,1])
-
-
-custom_weights = [w,b,w2,b2]
+custom_weights = [w1, b1, w2, b2]
 
 model = Sequential([
     Layer(units=3),
     Layer(units=1)
 ])
 
-
-
-
 model.set_weights(custom_weights)
-
-
+resultado = model.predict(in_layer)
+print(f"Resultado final: {resultado}")
