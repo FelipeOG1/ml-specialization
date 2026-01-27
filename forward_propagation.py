@@ -44,38 +44,37 @@ class Sequential:
             weights = self._weights[:index + 2]
             
         
-    def set_weights(self,weights:np.ndarray):
+    def set_weights(self,weights:list[np.ndarray]):
         if len(weights) != len(self.layers) * 2:raise ValueError("Wrong number of weights")
         self._weights = weights
         
     
-
+    
 
 in_layer = np.array([-2,4])
 
 w = np.array([[1,-3,5],
               [2,4,6]])
 
+b = np.array([-1,1,2])
 
 w2 = np.array([[5,-1,2],
               [1,3,10]])
 
 
-
 b2 = np.array([-3,5,1])
 
 
+custom_weights = [w,b,w2,b2]
 
-b = np.array([-1,1,2])
-
-l1 = Layer(units=3)
-l2 = Layer(units=1)
-
-
-a1_out = l1(a_in=in_layer,
-            w=w,
-            b=b
-            )
+model = Sequential([
+    Layer(units=3),
+    Layer(units=1)
+])
 
 
-print(a1_out)   
+
+
+model.set_weights(custom_weights)
+
+
