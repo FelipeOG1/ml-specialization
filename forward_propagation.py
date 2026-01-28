@@ -6,6 +6,8 @@ class Neuron:
         sigmoid = lambda z:1/(1+np.exp(-z))
         return sigmoid((np.dot(x,w)) + b)    
 
+
+
 class Layer:
     def __init__(self,units:int):
         self._core = [Neuron() for _ in range(units)]
@@ -30,8 +32,6 @@ class Layer:
         if position>=len(self._core):raise ValueError(f"Out of bounce,this layer only have {self.units}units")
         return self._core[position]
 
-
-
 class Sequential:
     
     def __init__(self,layers:list[Layer]):
@@ -51,6 +51,10 @@ class Sequential:
             weight_index+=2
 
         return current_input
+
+
+    def __len__(self):
+        return len(self.layers)
             
         
     def set_weights(self,weights:list[np.ndarray]):
@@ -79,4 +83,14 @@ model = Sequential([
 
 model.set_weights(custom_weights)
 resultado = model.predict(in_layer)
-print(f"Resultado final: {resultado}")
+
+
+j = 0
+i = 2
+    
+
+i,j  = i*2,j*2
+print(i,j)
+print(len(model))
+
+
