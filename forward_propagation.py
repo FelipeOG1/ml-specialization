@@ -1,10 +1,12 @@
 import numpy as np
 
 
+def g(z):return 1/(1+np.exp(-z))
+
 class Neuron:
     def compute_scalar(self,x,w,b):
         sigmoid = lambda z:1/(1+np.exp(-z))
-        return sigmoid((np.dot(x,w)) + b)    
+        return sigmoid((np.dot(x,w)) + b)
 
 
 
@@ -14,6 +16,9 @@ class Layer:
         self.units = units
         self.a_out = np.zeros(units)
 
+
+    def vectorized_a_out(self,a_in,w,b):return g(np.matmul(a_in,w) + b)
+        
     def __call__(self,a_in,w,b):#returns a_out
         for index,neuron in enumerate(self._core):
             curr_w = w[:,index]
@@ -37,6 +42,7 @@ class Sequential:
     def __init__(self,layers:list[Layer]):
         self.layers = layers
         self._weights = None
+        
     def predict(self,x_train:np.ndarray):
         if not self._weights:raise ValueError("Add weithgs by set_weights")
             
@@ -62,35 +68,4 @@ class Sequential:
         self._weights = weights
         
     
-    
-in_layer = np.array([-2, 4]) 
-
-w1 = np.array([[1, -3, 5],
-               [2,  4, 6]])
-b1 = np.array([-1, 1, 2])
-
-w2 = np.array([[5], 
-               [1], 
-               [3]]) 
-b2 = np.array([-3])
-
-custom_weights = [w1, b1, w2, b2]
-
-model = Sequential([
-    Layer(units=3),
-    Layer(units=1)
-])
-
-model.set_weights(custom_weights)
-resultado = model.predict(in_layer)
-
-
-j = 0
-i = 2
-    
-
-i,j  = i*2,j*2
-print(i,j)
-print(len(model))
-
 
