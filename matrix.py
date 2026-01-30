@@ -21,9 +21,7 @@ class Matrix:
     def shape(self):return len(self.values),len(self.values[0])
     
     
-    
-
-                
+                   
             
     def __repr__(self) -> str:
         return f"Matrix({self.values})"
@@ -33,7 +31,7 @@ class Matrix:
 
     def __len__(self):
         return len(self.values)
-
+    
     def __add__(self, other):
         if not isinstance(other, Matrix):
             raise TypeError(f"Cannot sum matrix and {type(other)}")
@@ -48,8 +46,25 @@ class Matrix:
             ]
         
         )
+
+    def __mul__(self, other):
+        if not isinstance(other, Matrix):
+            raise TypeError(f"Cannot sum matrix and {type(other)}")
+        
+        if len(self) != len(other) or len(self.values[0]) != len(other.values[0]):
+            raise ValueError("Matrices must have the same dimensions to be added")
+
+        return Matrix(
+            [
+            [a * b for a, b in zip(row_self, row_other)]
+            for row_self, row_other in zip(self, other)
+            ]
+        
+        )
+
+
+
+
+
     
-
-
-
-
+          
