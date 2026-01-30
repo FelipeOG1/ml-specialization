@@ -8,8 +8,6 @@ class Neuron:
         sigmoid = lambda z:1/(1+np.exp(-z))
         return sigmoid((np.dot(x,w)) + b)
 
-
-
 class Layer:
     def __init__(self,units:int):
         self._core = [Neuron() for _ in range(units)]
@@ -68,4 +66,3 @@ class Sequential:
         self._weights = weights
         
     
-

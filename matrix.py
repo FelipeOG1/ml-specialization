@@ -28,7 +28,13 @@ class Matrix:
                 new_values[j][i] = self[i][j]
 
         return Matrix(new_values)
-           
+
+        
+    def get_column(self,col):
+        if col>self.shape[1]:
+            raise ValueError("Invalid col position")
+        return [row[col] for row in self.values]
+        
     def __repr__(self) -> str:
         return f"Matrix({self.values})"
 
@@ -76,6 +82,8 @@ class Matrix:
         
         )
 
+    
+
     def dot(self,m2):
         new_matrix = self * m2
         _sum = 0
@@ -84,6 +92,5 @@ class Matrix:
 
         return _sum
         
-
     
           
