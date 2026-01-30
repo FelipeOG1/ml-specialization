@@ -15,8 +15,6 @@ class Matrix:
         self.values = values
 
 
-
-
     @property
     def shape(self):return len(self.values),len(self.values[0])
     
@@ -62,9 +60,14 @@ class Matrix:
         
         )
 
+    def dot(self,m2):
+        new_matrix = self * m2
+        _sum = 0
+        for row in new_matrix:
+            _sum+=sum(row)
 
-
-
+        return _sum
+        
 
     
           
