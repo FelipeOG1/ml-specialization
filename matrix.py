@@ -18,7 +18,17 @@ class Matrix:
     @property
     def shape(self):return len(self.values),len(self.values[0])
     
-    
+    @property
+    def T(self):
+        
+        rows,cols = self.shape
+        values = [[0 for _ in range(rows)] for _ in range(cols)]
+        for i in range(rows):
+            for j in range(cols):
+                values[j][i] = self.values[i][j]
+                
+        return Matrix(values)
+            
                    
             
     def __repr__(self) -> str:
