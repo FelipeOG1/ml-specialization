@@ -25,8 +25,10 @@ class Matrix:
         
         for i in range(rows):
             for  j in range(cols):
-                pass
-            
+                new_values[j][i] = self[i][j]
+
+        return Matrix(new_values)
+           
     def __repr__(self) -> str:
         return f"Matrix({self.values})"
 
