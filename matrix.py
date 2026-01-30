@@ -15,8 +15,7 @@ class Matrix:
     @property
     def T(self):
         rows,cols = self.shape
-        tranpose =[[row[i] for row in self.values] for i in range(cols)]
-        return Matrix(tranpose)
+        return Matrix([[row[i] for row in self.values] for i in range(cols)])
     def get_column(self,col):
         rows,cols = self.shape
 
