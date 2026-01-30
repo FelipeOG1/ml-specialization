@@ -1,10 +1,4 @@
 
-"""
-
-It has super weak rules for matrix validation 
-This is just to help me understand the concectps behind  np.dot, matmul,etc.
-
-"""
 class Matrix:
     def __init__(self, values: list) -> None:
         if not all(isinstance(value, list) for value in values):
