@@ -20,16 +20,12 @@ class Matrix:
     
     @property
     def T(self):
-        
         rows,cols = self.shape
-        values = [[0 for _ in range(rows)] for _ in range(cols)]
+        new_values =  [[0 for _ in range(rows)]for _ in range(cols)]   
+        
         for i in range(rows):
-            for j in range(cols):
-                values[j][i] = self.values[i][j]
-                
-        return Matrix(values)
-            
-                   
+            for  j in range(cols):
+                pass
             
     def __repr__(self) -> str:
         return f"Matrix({self.values})"
@@ -37,6 +33,14 @@ class Matrix:
     def __iter__(self):
         return iter(self.values)
 
+
+    def __getitem__(self,index):
+        if isinstance(index,tuple):
+            row,col = index
+            return self.values[row][col]
+        
+        return self.values[index]
+        
     def __len__(self):
         return len(self.values)
     
