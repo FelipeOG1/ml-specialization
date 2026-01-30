@@ -21,19 +21,16 @@ class Matrix:
     @property
     def T(self):
         rows,cols = self.shape
-        new_values =  [[0 for _ in range(rows)]for _ in range(cols)]   
-        
-        for i in range(rows):
-            for  j in range(cols):
-                new_values[j][i] = self[i][j]
-
-        return Matrix(new_values)
-
-        
+        tranpose =[[row[i] for row in self.values] for i in range(cols)]
+        return Matrix(tranpose)
     def get_column(self,col):
-        if col>self.shape[1]:
+        rows,cols = self.shape
+
+        if col>cols:
             raise ValueError("Invalid col position")
         return [row[col] for row in self.values]
+            
+            
         
     def __repr__(self) -> str:
         return f"Matrix({self.values})"
