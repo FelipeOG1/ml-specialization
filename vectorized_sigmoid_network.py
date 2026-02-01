@@ -5,6 +5,16 @@ from dataclasses import dataclass
 def g(z):return 1/(1+np.exp(-z))
 
 @dataclass
+class BinaryCrossentropy:
+    y_hat:np.ndarray
+    y:np.ndarray
+
+    def compute_loss(self):return -self.y*np.log(self.y_hat) - (1-self.y) * np.log(1-self.y_hat)
+    
+    def compute_cost(self):return np.mean(self.compute_loss())
+
+
+@dataclass
 class Layer:
     units:int
     w:np.ndarray | None = None
@@ -29,6 +39,6 @@ class Sequential:
         for index,layer in enumerate(self.layers):
             layer.w,layer.b = weights[index * 2],weights[index * 2 + 1]
 
-
-        
+    
+ 
 

@@ -23,10 +23,10 @@ class Layer:
                                                       w=curr_w,
                                                       b=curr_b
                                                       )
+
             
         return self.a_out
         
-     
 
     def __len__(self):
         return len(self._core)
@@ -64,6 +64,4 @@ class Sequential:
         if len(weights) != len(self.layers) * 2:raise ValueError("Wrong number of weights")
         self._weights = weights
      
- jk        
-        
     
