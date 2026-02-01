@@ -67,7 +67,6 @@ class Matrix:
         
         )
 
-    
 
     def dot_scalar(self,m2):
         new_matrix = self * m2

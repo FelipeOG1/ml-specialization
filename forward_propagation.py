@@ -1,6 +1,5 @@
 import numpy as np
 
-
 def g(z):return 1/(1+np.exp(-z))
 
 class Neuron:
@@ -25,8 +24,10 @@ class Layer:
                                                       w=curr_w,
                                                       b=curr_b
                                                       )
+            
         return self.a_out
         
+     
 
     def __len__(self):
         return len(self._core)
@@ -56,7 +57,6 @@ class Sequential:
 
         return current_input
 
-
     def __len__(self):
         return len(self.layers)
             
@@ -64,5 +64,7 @@ class Sequential:
     def set_weights(self,weights:list[np.ndarray]):
         if len(weights) != len(self.layers) * 2:raise ValueError("Wrong number of weights")
         self._weights = weights
+     
+ jk        
         
     
