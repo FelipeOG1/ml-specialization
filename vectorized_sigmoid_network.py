@@ -29,3 +29,6 @@ class Sequential:
         for index,layer in enumerate(self.layers):
             layer.w,layer.b = weights[index * 2],weights[index * 2 + 1]
 
+
+        
+

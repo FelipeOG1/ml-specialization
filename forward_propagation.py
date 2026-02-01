@@ -14,7 +14,6 @@ class Layer:
         self.a_out = np.zeros(units)
 
 
-    def vectorized_a_out(self,a_in,w,b):return g(np.matmul(a_in,w) + b)
         
     def __call__(self,a_in,w,b):#returns a_out
         for index,neuron in enumerate(self._core):
