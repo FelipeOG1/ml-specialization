@@ -18,6 +18,8 @@ class NeuralNetwork:
         self.model = tf.keras.Sequential([
             tf.keras.layers.Dense(units = 1,input_dim = 1,activation = 'sigmoid',name = "L1")
             ])
+
+        
     @property
     def weights(self):
         kernel_w,kernel_b = self.model.weights
@@ -42,11 +44,4 @@ class NeuralNetwork:
         alog = sigmoid(np.dot(self.X[0].reshape(1,1),w) + b)
         assert(a1 == alog)
         
-x =  np.array([[1.0], [2.0]], dtype=np.float32)#a0
-y = np.array([[300.0], [500.0]], dtype=np.float32)
-nn = NeuralNetwork(x,y)
-
-w,b = 2.0,-4.5
-nn.setup_custom_weights(w,b)
-print(nn.test_sigmoid_activation())
 
