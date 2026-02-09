@@ -15,11 +15,23 @@ class BinaryCrossentropy:
 
 
 @dataclass
-class Layer:
+class Dense:
     units:int
-    w:np.ndarray | None = None
-    b:np.ndarray | None = None
-      
+    w:np.ndarray = field(False)
+    b:np.ndarray = field(False)
+    activation_key:str
+    activation_function = field(False)
+    
+    def __post_init__(self):
+        if not self.activation_key in ('sigmoid','relu','linear'):
+            raise ValueError("Not implemented activation function")
+        
+        fucntions = {'sigmoid':g,
+                     ''
+                     }
+        
+    
+    def __postinit
 class Sequential:
     def __init__(self,layers:list[Layer]):
         self.layers = layers
