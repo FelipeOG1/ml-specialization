@@ -36,8 +36,8 @@ class UniLinearRegression:
 
         
     def compute_cost_function(self):return ((self.y_hat(self.x_train) - self.y_train) ** 2).sum() / (2 * self.m)
-    def compute_w_derivative(self):return ((self.y_hat(self.x_train) - self.y_train) * self.x_train).sum() / self.m
-    def compute_b_derivative(self):return (self.y_hat(self.x_train) - self.y_train).sum() / self.m
+    def compute_w_derivative(self):return np.mean((self.y_hat(self.x_train) - self.y_train) * self.x_train)
+    def compute_b_derivative(self):return np.mean((self.y_hat(self.x_train) - self.y_train))
 
 
     def gradient_descent(self,max_iter = 100000,epsilon = 1e-6,prev_cost = float("inf")):

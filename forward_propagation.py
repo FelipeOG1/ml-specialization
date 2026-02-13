@@ -12,8 +12,6 @@ class Layer:
         self._core = [Neuron() for _ in range(units)]
         self.units = units
         self.a_out = np.zeros(units)
-
-
         
     def __call__(self,a_in,w,b):#returns a_out
         for index,neuron in enumerate(self._core):
