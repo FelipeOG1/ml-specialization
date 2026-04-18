@@ -12,7 +12,6 @@ encoder = lambda text: [char_index[char] for char in text]
 decoder = lambda array: "".join([index_char[index] for index in array])
 pairs = lambda name: zip(name, name[1:])
 
-
 counts = {}
 for name in names:
     chs = ['<S>'] + list(name) + ['<E>']
@@ -20,6 +19,7 @@ for name in names:
         bigram = (c1, c2)
         counts[bigram] = counts.get(bigram, 0) + 1
 
-values = sorted(counts.items(), key=lambda x:-x[1])
+values = sorted(counts.items(), key=lambda x: -x[1])
+chars_c = len(chars) + 2
 
-print(values[:10])
+a = torch.zeros(chars_c, chars_c, dtype=torch.int32)
