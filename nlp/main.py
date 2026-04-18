@@ -8,7 +8,6 @@ class NameTokenaizer:
         self._char_index["."] = 0
         self._index_char[0] = "."
         
-
     @property
     def num_chars(self):
         return len(self._chars) + 1
@@ -35,12 +34,9 @@ class DigramMap:
             for c1, c2 in zip(chrs, chrs[1:]):
                 self._tensor[self._tokenaizer.encode_char(c1), self._tokenaizer.encode_char(c2)] +=1
         
-    def __getitem__(self, index: int):
-        return self._tensor[index]
+    def __getitem__(self, idx):
+        return self._tensor[idx]
            
-
-
-    
 
 if __name__ == "__main__":
     import os
