@@ -1,46 +1,19 @@
-import torch
-import os
 
-    
-names = open(os.path.join("data", "names.txt"), "r").read().splitlines()
-
-chars = sorted(list(set(''.join(names))))
-
-char_index = {char:i+1 for i, char in enumerate(chars)}
-index_char = {char_index[char]:char for _, char in enumerate(chars)}
-
-char_index["."] = 0
-index_char[0] = "."
-
-counts = {}
-values = sorted(counts.items(), key=lambda x: -x[1])
-chars_c = len(chars) + 1
-
-N = torch.zeros(chars_c, chars_c, dtype=torch.int32)
-
-for name in names:
-    chrs = '.' + name + '.'
-    for c1, c2 in zip(chrs, chrs[1:]):
-        idx1, idx2 = char_index[c1], char_index[c2]
-        N[idx1, idx2] += 1
+class NameTokenaizer:
+    def __init__(self, names: list[str]):
+        _chars = sorted(list(set(''.join(names))))
         
-g = torch.Generator().manual_seed(2147483647)
-p = N[0].float()
-p = p / p.sum()
-ix = torch.multinomial(p, num_samples=1, replacement=True, generator=g)
-P = (N + 1).float()
-P /= P.sum(1, keepdim=True)
+        self._char_index = {char:index for index, char in enumerate(_chars)}
+        self._index_char = {self._char_index[char]:char for _, char in enumerate(_chars)}
+    def encode(self, name: str):
+        return [self._char_index[char] for char in name]
+        
+    def decode(self, encoded_str: list[int]):
+        return ''.join([self._index_char[char] for char in encoded_str])
 
-like_hood = 0.0
-n_names = 0
-for name in ["andrejq"]:
-    chrs = '.' + name + '.'
-    for ch1, ch2 in zip(chrs, chrs[1:]):
-        idx1, idx2 = char_index[ch1], char_index[ch2]
-        prob = P[idx1, idx2]
-        log_prob = torch.log(prob)
-        like_hood += log_prob
-        n_names += 1
-neg_like = -(like_hood)
-nll = neg_like / n_names
-print(nll)
+
+if __name__ == "__main__":
+    import os
+    data = os.path.join("data", "names.txt")
+    names = open(data, "r").read().splitlines()
+
