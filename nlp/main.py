@@ -27,11 +27,8 @@ for name in names:
         idx1, idx2 = char_index[c1], char_index[c2]
         N[idx1, idx2] += 1
         
-p = normalized(N[0])
 g = torch.Generator().manual_seed(2147483647)
-ix = torch.multinomial(p, num_samples=1, replacement=True, generator=g).item()
 P = normalized(N)
-
 for i in range(10):
     ix = 0
     outs = []
