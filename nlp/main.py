@@ -1,9 +1,6 @@
 import torch
 import os
 
-def normalized(p):
-    p = p.float()
-    return p / p.sum()
     
 names = open(os.path.join("data", "names.txt"), "r").read().splitlines()
 
@@ -28,15 +25,20 @@ for name in names:
         N[idx1, idx2] += 1
         
 g = torch.Generator().manual_seed(2147483647)
-P = normalized(N)
-for i in range(10):
-    ix = 0
-    outs = []
-    while True:
-        ix = torch.multinomial(P[ix], num_samples=1, replacement=True, generator=g).item()
-        outs.append(index_char[ix])
-        if ix == 0:
-            print("".join(outs))
-            break;
+p = N[0].float()
+p = p / p.sum()
+ix = torch.multinomial(p, num_samples=1, replacement=True, generator=g)
+P = N.float()
+P = P / P.sum(1, keepdim=True)
 
+for _ in range(30):
+    ix = 0
+    out = []
+    while True:
+        p = P[ix]
+        ix = torch.multinomial(p, num_samples=1, replacement=True, generator=g).item()
+        out.append(index_char[ix])
+        if ix == 0:
+            print("".join(out))
+            break
 
