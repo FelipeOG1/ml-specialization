@@ -2,3 +2,5 @@ env
 venv
 *.png
 prac.py
+
+*.swp
