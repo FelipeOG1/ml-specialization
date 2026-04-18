@@ -28,17 +28,19 @@ g = torch.Generator().manual_seed(2147483647)
 p = N[0].float()
 p = p / p.sum()
 ix = torch.multinomial(p, num_samples=1, replacement=True, generator=g)
-P = N.float()
-P = P / P.sum(1, keepdim=True)
+P = (N + 1).float()
+P /= P.sum(1, keepdim=True)
 
-for _ in range(30):
-    ix = 0
-    out = []
-    while True:
-        p = P[ix]
-        ix = torch.multinomial(p, num_samples=1, replacement=True, generator=g).item()
-        out.append(index_char[ix])
-        if ix == 0:
-            print("".join(out))
-            break
-
+like_hood = 0.0
+n_names = 0
+for name in ["andrejq"]:
+    chrs = '.' + name + '.'
+    for ch1, ch2 in zip(chrs, chrs[1:]):
+        idx1, idx2 = char_index[ch1], char_index[ch2]
+        prob = P[idx1, idx2]
+        log_prob = torch.log(prob)
+        like_hood += log_prob
+        n_names += 1
+neg_like = -(like_hood)
+nll = neg_like / n_names
+print(nll)
