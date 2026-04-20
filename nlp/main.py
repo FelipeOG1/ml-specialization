@@ -67,13 +67,19 @@ class DigramModel:
     
     
 if __name__ == "__main__":
-
     import os
     data = os.path.join("data", "names.txt")
     names = open(data, "r").read().splitlines()
-    
+    g = torch.Generator().manual_seed(2147483647)
     m = DigramModel(names)
     
     x, y = m.get_training_set()
-    xenc = F.one_hot(x, num_classes=27)
-    print()
+    
+    xenc = F.one_hot(x, num_classes=27).float()
+    print(xenc.shape) 
+    W = torch.rand((27, 27), generator=g)
+    B = torch.rand(27, 1)
+    logits = xenc @ W
+    counts = logits.exp()
+    prob =  counts / counts.sum(1, keepdim=True)
+    
