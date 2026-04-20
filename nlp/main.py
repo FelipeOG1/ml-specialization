@@ -1,5 +1,5 @@
 import torch
-
+import torch.nn.functional as F
 class NameTokenaizer:
     def __init__(self, names: list[str]):
         self._chars = sorted(list(set(''.join(names))))
@@ -25,9 +25,6 @@ class NameTokenaizer:
     def decode_list(self, encoded_str: list[int]):
         return ''.join([self._index_char[char] for char in encoded_str])
     
-
-
-
 class DigramModel:
     def __init__(self, names):
         self._data = names
@@ -57,7 +54,7 @@ class DigramModel:
         return -(log_lh / iterations)
 
 
-    def get_training_set(self) -> tuple[torch.tensor, torch.tensor]:
+    def get_training_set(self) -> tuple[torch.Tensor, torch.Tensor]:
         x, y = [], []
         for name in self._data[:1]:
             name = self._tokenaizer.prepare_name(name)
@@ -67,12 +64,10 @@ class DigramModel:
             
 
         return torch.tensor(x), torch.tensor(y)
-                
-                  
-           
     
-       
+    
 if __name__ == "__main__":
+
     import os
     data = os.path.join("data", "names.txt")
     names = open(data, "r").read().splitlines()
@@ -80,6 +75,5 @@ if __name__ == "__main__":
     m = DigramModel(names)
     
     x, y = m.get_training_set()
-    print(x)
-    print(y)
-    
+    xenc = F.one_hot(x, num_classes=27)
+    print(xenc.shape)
