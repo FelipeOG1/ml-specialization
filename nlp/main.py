@@ -54,7 +54,7 @@ class DigramModel:
         return -(log_lh / iterations)
 
 
-    def get_training_set(self) -> tuple[torch.Tensor, torch.Tensor]:
+    def get_training_set(self) -> tuple[torch.tensor, torch.tensor]:
         x, y = [], []
         for name in self._data[:1]:
             name = self._tokenaizer.prepare_name(name)
@@ -76,4 +76,4 @@ if __name__ == "__main__":
     
     x, y = m.get_training_set()
     xenc = F.one_hot(x, num_classes=27)
-    print(xenc.shape)
+    print()
