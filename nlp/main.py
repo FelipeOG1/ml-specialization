@@ -57,15 +57,17 @@ class Digram:
         return torch.tensor(x), torch.tensor(y)
     
 class Model:
-    def __init__(self, x: torch.tensor, y: torch.tensor, w: torch.tensor) -> None:
-        self.x = F.one_hot(x, num_classes=27).float()
-        self.y, self.w = y, w
-    
+    def __init__(self, w: torch.tensor) -> None:
+        self.w = w
         
-    def _forward(self):
-        x = F.one_hot(self.x, num_classes=27).float()
+    def __call__(self, x: torch.tensor):
         counts = (x @ self.w).exp()
-       
+        return -(counts / counts.sum(1, keepdims=True))
+
+    def fit(self, y: torch.tensor, epochs=100,):
+        eps = 1e-6
+        
+        return eps
          
 if __name__ == "__main__":
     import os
@@ -74,6 +76,7 @@ if __name__ == "__main__":
     g = torch.Generator().manual_seed(2147483647)
     digram = Digram(names)
     x, y = digram.get_training_set()
+    x = F.one_hot(x, num_classes=27)
     W = torch.rand(27, 27)
-    m = Model(x, y, W)
-    print(m.forward())
+    m = Model(W)
+
