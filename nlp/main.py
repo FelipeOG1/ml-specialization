@@ -21,9 +21,12 @@ class NameTokenaizer:
         return self._index_char[value]
     
     def encode_string(self, name: str):
-        return [self._char_index[char] for char in name]   
+        return [self._char_index[char] for char in name]
     def decode_list(self, encoded_str: list[int]):
         return ''.join([self._index_char[char] for char in encoded_str])
+    
+    def decode_int(self, value: int):
+        return self._index_char[value]
     
 class DigramModel:
     def __init__(self, names):
@@ -73,13 +76,31 @@ if __name__ == "__main__":
     g = torch.Generator().manual_seed(2147483647)
     m = DigramModel(names)
     
-    x, y = m.get_training_set()
+    xs, ys = m.get_training_set()
     
-    xenc = F.one_hot(x, num_classes=27).float()
+    xenc = F.one_hot(xs, num_classes=27).float()
     print(xenc.shape) 
     W = torch.rand((27, 27), generator=g)
     B = torch.rand(27, 1)
-    logits = xenc @ W
-    counts = logits.exp()
-    prob =  counts / counts.sum(1, keepdim=True)
+    #softmax
     
+    counts = (xenc @ W).exp()
+    probs = counts / counts.sum(1, keepdims=True)
+    
+    losses = torch.zeros(5)
+
+    tok = NameTokenaizer(names)
+    
+    for i in range(5):
+        x = xs[i].item()
+        y = ys[i].item()
+        _, prediction = torch.max(probs[i], dim=0)
+        print(f'se esperaba: {tok.decode_int(y)}')
+        print(f'predijo: {tok.decode_int(prediction.item())}')       
+        p_y = probs[i, y]
+        print(f'neurla net le asigno a {tok.decode_int(y)} una probabilidad de {p_y}')
+        loss = -(torch.log(p_y)).item()
+        print('loss:', loss)
+        losses[i] = loss
+
+    print(f'average loss={losses.mean().item()}')
