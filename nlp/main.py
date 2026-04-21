@@ -58,17 +58,22 @@ class Digram:
     
 class Model:
     def __init__(self, w: torch.tensor) -> None:
+        w.grad = None
         self.w = w
-        
     def __call__(self, x: torch.tensor):
         counts = (x @ self.w).exp()
-        return -(counts / counts.sum(1, keepdims=True))
-
-    def fit(self, y: torch.tensor, epochs=100,):
+        return counts / counts.sum(1, keepdims=True)
+    
+    def _get_loss(self, y_hat: torch.tensor, y: torch.tensor):
+        loss = -y_hat[torch.arange(5), y].log().mean()
+        return loss
+    def fit(self, x: torch.tensor, y: torch.tensor, epochs=100):
         eps = 1e-6
         
-        return eps
-         
+        for i in range(epochs):
+            current_loss = self._get_loss(self(x), y)
+            
+        
 if __name__ == "__main__":
     import os
     data = os.path.join("data", "names.txt")
@@ -76,7 +81,7 @@ if __name__ == "__main__":
     g = torch.Generator().manual_seed(2147483647)
     digram = Digram(names)
     x, y = digram.get_training_set()
-    x = F.one_hot(x, num_classes=27)
+    x = F.one_hot(x, num_classes=27).float()
     W = torch.rand(27, 27)
     m = Model(W)
-
+    print(m.fit(x, y))
