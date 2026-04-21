@@ -45,18 +45,6 @@ class Digram:
     def __getitem__(self, idx):
         return self._map[idx]
 
-
-    def get_loss_name(self, name):
-        log_lh = 0.0
-        iterations = 0
-        name = self._tokenaizer.prepare_name(name) 
-        for c1, c2 in zip(name, name[1:]):
-            log_prob = torch.log(self.P[self._tokenaizer.encode_char(c1), self._tokenaizer.encode_char(c2)])
-            log_lh += log_prob
-            iterations += 1
-        return -(log_lh / iterations)
-
-
     def get_training_set(self) -> tuple[torch.tensor, torch.tensor]:
         x, y = [], []
         for name in self._data[:1]:
