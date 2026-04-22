@@ -17,6 +17,7 @@ class NameTokenaizer:
         
     def encode_char(self, char: str):
         return self._char_index[char]
+    
     def decode_int(self, value: int):
         return self._index_char[value]
     
@@ -57,20 +58,29 @@ class Digram:
         return torch.tensor(x), torch.tensor(y)
     
 class Model:
-    def __init__(self, w: torch.tensor) -> None:
+    def __init__(self, w: torch.tensor,
+                 tokenaizer: NameTokenaizer) -> None:
         self.w = w
-        
+        self.tok = tokenaizer
         
     def __call__(self, x: torch.tensor):
         counts = (x @ self.w).exp()
         return counts / counts.sum(1, keepdims=True)
     
+
+    def predict_char(self):
+        
+    
     def _get_loss(self, y_hat: torch.tensor, y: torch.tensor):
         loss = -y_hat[torch.arange(y_hat.shape[0]), y].log().mean()
         return loss
     
+    
+    def get_w(self) -> torch.tensor:
+        return self.w
+
     def fit(self, x: torch.tensor, y: torch.tensor, 
-            epochs=100, learning_rate=0.1
+            epochs=100, learning_rate=0.1,
             ):
         eps = 1e-6
         losses = []
@@ -78,7 +88,6 @@ class Model:
             prev_loss = self._get_loss(self(x), y)
             self.w.grad = None
             prev_loss.backward()
-            
             self.w.data += -learning_rate * self.w.grad 
             new_loss = self._get_loss(self(x), y)
             losses.append(new_loss.item())
@@ -88,7 +97,7 @@ class Model:
                 break
 
         print(losses[-1])
-                
+           
             
 if __name__ == "__main__":
     import os
@@ -102,5 +111,12 @@ if __name__ == "__main__":
     m = Model(W)
     m.fit(x, y, epochs=100, learning_rate=50)
     
+    '.e'
+    
+
+
+   
+          
+
 
     
