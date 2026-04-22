@@ -47,7 +47,7 @@ class Digram:
 
     def get_training_set(self) -> tuple[torch.tensor, torch.tensor]:
         x, y = [], []
-        for name in self._data[:1]:
+        for name in self._data:
             name = self._tokenaizer.prepare_name(name)
             for c1, c2 in zip(name, name[1:]):    
                 x.append(self._tokenaizer.encode_char(c1)) 
@@ -66,25 +66,28 @@ class Model:
         return counts / counts.sum(1, keepdims=True)
     
     def _get_loss(self, y_hat: torch.tensor, y: torch.tensor):
-        loss = -y_hat[torch.arange(5), y].log().mean()
+        loss = -y_hat[torch.arange(y_hat.shape[0]), y].log().mean()
         return loss
     
-    def fit(self, x: torch.tensor, y: torch.tensor, epochs=100):
+    def fit(self, x: torch.tensor, y: torch.tensor, 
+            epochs=100, learning_rate=0.1
+            ):
         eps = 1e-6
         losses = []
         for i in range(epochs):
             prev_loss = self._get_loss(self(x), y)
             self.w.grad = None
             prev_loss.backward()
-            self.w.data += -0.1 * self.w.grad 
+            
+            self.w.data += -learning_rate * self.w.grad 
             new_loss = self._get_loss(self(x), y)
             losses.append(new_loss.item())
+            
             if torch.abs(prev_loss - new_loss) < eps:
                 print(f'convergence at {i} iteration')
                 break
 
-        print(f'final_loss={losses[-1]}')
-                
+        print(losses[-1])
                 
             
 if __name__ == "__main__":
@@ -97,7 +100,7 @@ if __name__ == "__main__":
     x = F.one_hot(x, num_classes=27).float()
     W = torch.rand((27, 27), generator=g, requires_grad=True)
     m = Model(W)
-    m.fit(x, y, epochs=5000)
+    m.fit(x, y, epochs=100, learning_rate=50)
     
 
     
