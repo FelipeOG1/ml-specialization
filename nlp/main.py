@@ -15,7 +15,7 @@ class NameTokenaizer:
     def prepare_name(self, name: str):
         return '.' + name + '.'
         
-    def encode_char(self, char: str):
+    def encode_char(self, char: str) -> int:
         return self._char_index[char]
     
     def decode_int(self, value: int):
@@ -68,37 +68,37 @@ class Model:
         return counts / counts.sum(1, keepdims=True)
     
 
-    def predict_char(self):
-        
-    
+    def predict_char(self, ch: str) -> str:
+        encoded_char = self.tok.encode_string(ch)
+        x = F.one_hot(torch.tensor(encoded_char), num_classes=27).float()
+        return self(x)
+
     def _get_loss(self, y_hat: torch.tensor, y: torch.tensor):
         loss = -y_hat[torch.arange(y_hat.shape[0]), y].log().mean()
         return loss
     
     
-    def get_w(self) -> torch.tensor:
-        return self.w
-
     def fit(self, x: torch.tensor, y: torch.tensor, 
             epochs=100, learning_rate=0.1,
-            ):
+            ) -> torch.tensor:
         eps = 1e-6
-        losses = []
+        loss = None
         for i in range(epochs):
             prev_loss = self._get_loss(self(x), y)
             self.w.grad = None
             prev_loss.backward()
             self.w.data += -learning_rate * self.w.grad 
             new_loss = self._get_loss(self(x), y)
-            losses.append(new_loss.item())
-            
+            loss = new_loss
+            print(loss.item())
             if torch.abs(prev_loss - new_loss) < eps:
                 print(f'convergence at {i} iteration')
                 break
 
-        print(losses[-1])
-           
-            
+        return self.w
+    
+    def set_w(self, w: torch.tensor): self.w = w
+    
 if __name__ == "__main__":
     import os
     data = os.path.join("data", "names.txt")
@@ -108,13 +108,12 @@ if __name__ == "__main__":
     x, y = digram.get_training_set()
     x = F.one_hot(x, num_classes=27).float()
     W = torch.rand((27, 27), generator=g, requires_grad=True)
-    m = Model(W)
-    m.fit(x, y, epochs=100, learning_rate=50)
-    
-    '.e'
-    
+    tok = NameTokenaizer(names)
 
-
+    m = Model(W, tokenaizer=tok)
+    w = m.fit(x, y, epochs=500, learning_rate=30)
+    
+       
    
           
 
