@@ -62,7 +62,8 @@ class Model:
                  tokenaizer: NameTokenaizer) -> None:
         self.w = w
         self.tok = tokenaizer
-        
+        self._g = torch.Generator().manual_seed(2147483647)
+   
     def __call__(self, x: torch.tensor):
         counts = (x @ self.w).exp()
         return counts / counts.sum(1, keepdims=True)
@@ -97,7 +98,22 @@ class Model:
         return self.w
     
     def set_w(self, w: torch.tensor) -> None : self.w = w
-    
+
+
+    def create_names(self, n_names=5):
+        for _ in range(n_names):
+            out = []
+            ix = 0
+            while True:
+                x = F.one_hot(torch.tensor([ix]), num_classes=27).float()
+                p  = self(x)
+                ix = torch.multinomial(p, num_samples=1, replacement=True, generator=self._g)
+                out.append(self.tok.decode_int(ix.item()))
+                if ix == 0:
+                    break
+
+            print(''.join(out))
+
 if __name__ == "__main__":
     import os
     data = os.path.join("data", "names.txt")
@@ -110,13 +126,11 @@ if __name__ == "__main__":
     tok = NameTokenaizer(names)
 
     m = Model(W, tokenaizer=tok)
-    w = m.fit(x, y, epochs=500, learning_rate=30)
+    w = m.fit(x, y, epochs=1000, learning_rate=60)
     m.set_w(w)
     
-    print(m.predict_char('o'))
-
+    m.create_names(50)
     
-       
        
    
           
