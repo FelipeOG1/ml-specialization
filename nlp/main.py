@@ -67,17 +67,16 @@ class Model:
         counts = (x @ self.w).exp()
         return counts / counts.sum(1, keepdims=True)
     
-
     def predict_char(self, ch: str) -> str:
         encoded_char = self.tok.encode_string(ch)
         x = F.one_hot(torch.tensor(encoded_char), num_classes=27).float()
-        return self(x)
-
+        prediction = self(x)
+        return self.tok.decode_int(torch.argmax(prediction).item())
+    
     def _get_loss(self, y_hat: torch.tensor, y: torch.tensor):
         loss = -y_hat[torch.arange(y_hat.shape[0]), y].log().mean()
         return loss
-    
-    
+
     def fit(self, x: torch.tensor, y: torch.tensor, 
             epochs=100, learning_rate=0.1,
             ) -> torch.tensor:
@@ -112,7 +111,12 @@ if __name__ == "__main__":
 
     m = Model(W, tokenaizer=tok)
     w = m.fit(x, y, epochs=500, learning_rate=30)
+    m.set_w(w)
     
+    print(m.predict_char('o'))
+
+    
+       
        
    
           
