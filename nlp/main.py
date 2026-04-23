@@ -91,6 +91,9 @@ class Model:
             new_loss = self._get_loss(self(x), y)
             loss = new_loss
             print(loss.item())
+            
+            if loss.item() < 2.48: break
+            
             if torch.abs(prev_loss - new_loss) < eps:
                 print(f'convergence at {i} iteration')
                 break
@@ -106,14 +109,13 @@ class Model:
             ix = 0
             while True:
                 x = F.one_hot(torch.tensor([ix]), num_classes=27).float()
-                p  = self(x)
-                ix = torch.multinomial(p, num_samples=1, replacement=True, generator=self._g)
-                out.append(self.tok.decode_int(ix.item()))
-                if ix == 0:
-                    break
-
-            print(''.join(out))
-
+                p = self(x)
+                ix = torch.multinomial(p, num_samples=1, replacement=True, generator=self._g).item()
+                out.append(ix)
+                if ix == 0:break
+                
+            name: str = self.tok.decode_list(out)
+            print(name)
 if __name__ == "__main__":
     import os
     data = os.path.join("data", "names.txt")
