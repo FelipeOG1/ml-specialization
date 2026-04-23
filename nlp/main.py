@@ -97,7 +97,7 @@ class Model:
 
         return self.w
     
-    def set_w(self, w: torch.tensor): self.w = w
+    def set_w(self, w: torch.tensor) -> None : self.w = w
     
 if __name__ == "__main__":
     import os
