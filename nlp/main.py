@@ -41,7 +41,7 @@ class TrainingSet:
         for name in self.names:
             context: list[int] = [0] * context_size
             for char in name + '.':
-                ix = self._encode_char(char)
+                ix = self._tok.encode_char(char)
                 x.append(context)
                 y.append(ix)
                 context = context[1:] + [ix]
@@ -110,4 +110,6 @@ if __name__ == "__main__":
     data = os.path.join("data", "names.txt")
     names = open(data, "r").read().splitlines()
     g = torch.Generator().manual_seed(2147483647)
-   
+    tok = NameTokenaizer(names)
+    x, y = TrainingSet(names, tok).get_training_set(context_size=3)
+    print(x)
