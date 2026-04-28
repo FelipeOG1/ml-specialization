@@ -52,7 +52,7 @@ class Model:
         self.w = w
         self.tok = tokenaizer
         self._g = torch.Generator().manual_seed(2147483647)
-   
+        self.C = torch.rand((27, 2))  
     def __call__(self, x: torch.tensor):
         counts = (x @ self.w).exp()
         return counts / counts.sum(1, keepdims=True)
@@ -112,4 +112,3 @@ if __name__ == "__main__":
     g = torch.Generator().manual_seed(2147483647)
     tok = NameTokenaizer(names)
     x, y = TrainingSet(names, tok).get_training_set(context_size=3)
-    print(x)
