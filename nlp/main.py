@@ -35,9 +35,17 @@ class TrainingSet:
                  tokenaizer: NameTokenaizer):
         self.names = names
         self._tok = tokenaizer
-    
-    
-    
+        
+    def get_training_set(self, context_size: int) -> tuple[torch.tensor, torch.tensor]:
+        x, y = [], []
+        for name in self.names:
+            context: list[int] = [0] * context_size
+            for char in name + '.':
+                ix = self._encode_char(char)
+                x.append(context)
+                y.append(ix)
+                context = context[1:] + [ix]
+        return torch.tensor(x), torch.tensor(y)
 class Model:
     def __init__(self, w: torch.tensor,
                  tokenaizer: NameTokenaizer) -> None:
