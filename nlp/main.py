@@ -29,33 +29,14 @@ class NameTokenaizer:
     def decode_int(self, value: int):
         return self._index_char[value]
     
-class Digram:
-    def __init__(self, names):
-        self._data = names
-        self._tokenaizer = NameTokenaizer(names)
-        self._map = torch.zeros(self._tokenaizer.num_chars, self._tokenaizer.num_chars)
-        self._generate_map()
-        self.P = self._map / self._map.float().sum(1, keepdim=True)
-        
-    def _generate_map(self):
-        for name in names:
-            name = self._tokenaizer.prepare_name(name) 
-            for c1, c2 in zip(name, name[1:]):
-                self._map[self._tokenaizer.encode_char(c1), self._tokenaizer.encode_char(c2)] +=1
-        
-    def __getitem__(self, idx):
-        return self._map[idx]
-
-    def get_training_set(self) -> tuple[torch.tensor, torch.tensor]:
-        x, y = [], []
-        for name in self._data:
-            name = self._tokenaizer.prepare_name(name)
-            for c1, c2 in zip(name, name[1:]):    
-                x.append(self._tokenaizer.encode_char(c1)) 
-                y.append(self._tokenaizer.encode_char(c2))
             
-
-        return torch.tensor(x), torch.tensor(y)
+class TrainingSet:
+    def __init__(self, names: list[str],
+                 tokenaizer: NameTokenaizer):
+        self.names = names
+        self._tok = tokenaizer
+    
+    
     
 class Model:
     def __init__(self, w: torch.tensor,
@@ -94,7 +75,7 @@ class Model:
             
             if loss.item() < 2.48: break
             
-            if torch.abs(prev_loss - new_loss) < eps:
+            if torch.abs(prev_loss - new_loss).item() < eps:
                 print(f'convergence at {i} iteration')
                 break
 
@@ -121,21 +102,4 @@ if __name__ == "__main__":
     data = os.path.join("data", "names.txt")
     names = open(data, "r").read().splitlines()
     g = torch.Generator().manual_seed(2147483647)
-    digram = Digram(names)
-    x, y = digram.get_training_set()
-    x = F.one_hot(x, num_classes=27).float()
-    W = torch.rand((27, 27), generator=g, requires_grad=True)
-    tok = NameTokenaizer(names)
-
-    m = Model(W, tokenaizer=tok)
-    w = m.fit(x, y, epochs=1000, learning_rate=60)
-    m.set_w(w)
-    
-    m.create_names(50)
-    
-       
    
-          
-
-
-    
